@@ -8,10 +8,18 @@ require(["scripts/three.min.js"], function () {
     document.body.appendChild( renderer.domElement );
 
     var geometry = new THREE.CubeGeometry(1,1,1);
-    var material = new THREE.MeshBasicMaterial( { color: 0xffff80, wireframe: true } );
+    var uniforms = {
+        color: { type: "c", value: new THREE.Color( 0x0000ff ) },
+    };
+    var material = new THREE.ShaderMaterial({
+        uniforms: uniforms,
+        vertexShader: document.getElementById('shaders/lit.vsh').textContent,
+        fragmentShader: document.getElementById('shaders/lit.fsh').textContent
+    });
+
     var cube = new THREE.Mesh( geometry, material );
     scene.add( cube );
-    camera.position.z = 5;
+    camera.position.z = 3;
 
     function render() {
         requestAnimationFrame(render);

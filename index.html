@@ -1,9 +1,49 @@
 <html>
-	<head>
-		<title>My first Three.js app</title>
-		<style>canvas { width: 100%; height: 100% }</style>
-	</head>
-	<body>
-        <script data-main="scripts/main" src="scripts/require.js"></script>
-	</body>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<title>My first Three.js app</title>
+	<style>canvas { width: 100%; height: 100% }</style>
+  </head>
+  <body>
+    <script data-main="scripts/main" src="scripts/require.js"></script>
+<!-- SHADER_SECTION_START -->
+<script type="x-shader/x-vertex" id="shaders/lit.vsh">
+// from THREE.js
+/*
+uniform mat4 modelViewMatrix;
+uniform mat4 projectionMatrix;
+uniform mat4 normalMatrix;
+attribute vec3 position;
+attribute vec3 normal;
+*/
+
+varying vec3 n;
+varying vec3 p;
+
+void main(void)
+{
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1);
+    n = normalMatrix * normal;
+    p.xyz = (modelViewMatrix * vec4(position, 1)).xyz;
+}
+</script>
+<script type="x-shader/x-fragment" id="shaders/lit.fsh">
+// from THREE.js
+/*
+uniform vec3 cameraPosition;
+*/
+
+uniform vec3 color;
+varying vec3 n;
+varying vec3 p;
+
+void main(void)
+{
+    vec3 v = normalize(cameraPosition - p);
+	gl_FragColor.rgb = color.rgb * dot(v, n);
+    gl_FragColor.a = 1.0;
+}
+</script>
+<!-- SHADER_SECTION_STOP -->
+  </body>
 </html>
