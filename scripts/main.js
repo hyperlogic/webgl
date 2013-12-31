@@ -10,22 +10,21 @@ require(["scripts/three.min.js"], function () {
     var geometry = new THREE.CubeGeometry(1, 1, 1);
     //var geometry = new THREE.SphereGeometry(1, 100, 100);
 
-	var floorTexture = new THREE.ImageUtils.loadTexture('images/checkerboard.jpg');
-	//floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
-	//floorTexture.repeat.set( 10, 10 );
-
+	var checkerTexture = new THREE.ImageUtils.loadTexture('images/checkerboard.jpg');
+    var specularTexture = new THREE.ImageUtils.loadTexture('images/holographic-foil2.png');
 
     var uniforms = {
-        map: {type: "t", value: floorTexture},
+        diffuseMap: {type: "t", value: checkerTexture},
+        specularMap: {type: "t", value: specularTexture},
         color: {type: "c", value: new THREE.Color(0x2020ff)},
         ambientColor: {type: "c", value: new THREE.Color(0x101010)},
         directionalLightColor: {type: "c", value: new THREE.Color(0xffffff)},
-        directionalLightDirection: {type: "v3", value: (new THREE.Vector3(0.2, 1, 0.2)).normalize()}
+        directionalLightDirection: {type: "v3", value: (new THREE.Vector3(0.1, 0.7, 0.5)).normalize()}
     };
     var material = new THREE.ShaderMaterial({
         uniforms: uniforms,
-        vertexShader: document.getElementById('shaders/tex_lit.vsh').textContent,
-        fragmentShader: document.getElementById('shaders/tex_lit.fsh').textContent,
+        vertexShader: document.getElementById('shaders/holo_foil.vsh').textContent,
+        fragmentShader: document.getElementById('shaders/holo_foil.fsh').textContent,
         maxDirLights: 1
     });
 
