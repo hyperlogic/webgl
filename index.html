@@ -11,36 +11,44 @@
 // from THREE.js
 /*
 uniform mat4 modelViewMatrix;
+uniform mat4 modelMatrix;
 uniform mat4 projectionMatrix;
 uniform mat4 normalMatrix;
+uniform vec3 cameraPosition;
 attribute vec3 position;
 attribute vec3 normal;
 */
 
 varying vec3 n;
-varying vec3 p;
+varying vec3 v;
 
 void main(void)
 {
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1);
     n = normalMatrix * normal;
-    p.xyz = (modelViewMatrix * vec4(position, 1)).xyz;
+    vec3 p = (modelMatrix * vec4(position, 1)).xyz;
+    v = normalize(cameraPosition - p);
 }
 </script>
 <script type="x-shader/x-fragment" id="shaders/lit.fsh">
 // from THREE.js
 /*
-uniform vec3 cameraPosition;
+
 */
+
+uniform vec3 ambientColor;
+uniform vec3 directionalLightColor;
+uniform vec3 directionalLightDirection;
 
 uniform vec3 color;
 varying vec3 n;
-varying vec3 p;
+varying vec3 v;
 
 void main(void)
 {
-    vec3 v = normalize(cameraPosition - p);
-	gl_FragColor.rgb = color.rgb * dot(v, n);
+    vec3 l = directionalLightDirection;
+    vec3 r = reflect(l, n);
+	gl_FragColor.rgb = directionalLightColor * max(0.0, dot(n, l)) + ambientColor;
     gl_FragColor.a = 1.0;
 }
 </script>
