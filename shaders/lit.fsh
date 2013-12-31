@@ -3,6 +3,9 @@
 
 */
 
+#define SPECULAR_GLOSS 15.0
+#define SPECULAR_COLOR vec3(1.0, 1.0, 1.0)
+
 uniform vec3 ambientColor;
 uniform vec3 directionalLightColor;
 uniform vec3 directionalLightDirection;
@@ -15,6 +18,10 @@ void main(void)
 {
     vec3 l = directionalLightDirection;
     vec3 r = reflect(l, n);
-	gl_FragColor.rgb = directionalLightColor * max(0.0, dot(n, l)) + ambientColor;
+    float diffuse = max(0.0, dot(n, l));
+    float specular = pow(max(0.0, dot(r, v)), SPECULAR_GLOSS);
+	gl_FragColor.rgb = color * directionalLightColor * diffuse +
+                       SPECULAR_COLOR * specular +
+                       ambientColor;
     gl_FragColor.a = 1.0;
 }

@@ -8,11 +8,12 @@ require(["scripts/three.min.js"], function () {
     document.body.appendChild(renderer.domElement);
 
     var geometry = new THREE.CubeGeometry(1, 1, 1);
+    //var geometry = new THREE.SphereGeometry(1, 100, 100);
     var uniforms = {
-        color: {type: "c", value: new THREE.Color(0x0000ff)},
-        ambientColor: {type: "c", value: new THREE.Color(0x202020)},
+        color: {type: "c", value: new THREE.Color(0x2020ff)},
+        ambientColor: {type: "c", value: new THREE.Color(0x101010)},
         directionalLightColor: {type: "c", value: new THREE.Color(0xffffff)},
-        directionalLightDirection: {type: "v3", value: (new THREE.Vector3(0.25, 1, 0.25)).normalize()}
+        directionalLightDirection: {type: "v3", value: (new THREE.Vector3(0.2, 1, 0.2)).normalize()}
     };
     var material = new THREE.ShaderMaterial({
         uniforms: uniforms,

@@ -27,7 +27,7 @@ void main(void)
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1);
     n = normalMatrix * normal;
     vec3 p = (modelMatrix * vec4(position, 1)).xyz;
-    v = normalize(cameraPosition - p);
+    v = normalize(p - cameraPosition);
 }
 </script>
 <script type="x-shader/x-fragment" id="shaders/lit.fsh">
@@ -35,6 +35,9 @@ void main(void)
 /*
 
 */
+
+#define SPECULAR_GLOSS 15.0
+#define SPECULAR_COLOR vec3(1.0, 1.0, 1.0)
 
 uniform vec3 ambientColor;
 uniform vec3 directionalLightColor;
@@ -48,7 +51,11 @@ void main(void)
 {
     vec3 l = directionalLightDirection;
     vec3 r = reflect(l, n);
-	gl_FragColor.rgb = directionalLightColor * max(0.0, dot(n, l)) + ambientColor;
+    float diffuse = max(0.0, dot(n, l));
+    float specular = pow(max(0.0, dot(r, v)), SPECULAR_GLOSS);
+	gl_FragColor.rgb = color * directionalLightColor * diffuse +
+                       SPECULAR_COLOR * specular +
+                       ambientColor;
     gl_FragColor.a = 1.0;
 }
 </script>
