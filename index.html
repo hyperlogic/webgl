@@ -30,6 +30,32 @@ void main(void)
     v = normalize(p - cameraPosition);
 }
 </script>
+<script type="x-shader/x-vertex" id="shaders/tex_lit.vsh">
+// from THREE.js
+/*
+uniform mat4 modelViewMatrix;
+uniform mat4 modelMatrix;
+uniform mat4 projectionMatrix;
+uniform mat4 normalMatrix;
+uniform vec3 cameraPosition;
+attribute vec3 position;
+attribute vec3 normal;
+attribute vec3 uv;
+*/
+
+varying vec3 n;
+varying vec3 v;
+varying vec2 texCoord;
+
+void main(void)
+{
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1);
+    n = normalMatrix * normal;
+    vec3 p = (modelMatrix * vec4(position, 1)).xyz;
+    v = normalize(p - cameraPosition);
+    texCoord = uv;
+}
+</script>
 <script type="x-shader/x-fragment" id="shaders/lit.fsh">
 // from THREE.js
 /*
@@ -57,6 +83,38 @@ void main(void)
                        SPECULAR_COLOR * specular +
                        ambientColor;
     gl_FragColor.a = 1.0;
+}
+</script>
+<script type="x-shader/x-fragment" id="shaders/tex_lit.fsh">
+// from THREE.js
+/*
+
+*/
+
+#define SPECULAR_GLOSS 15.0
+#define SPECULAR_COLOR vec3(1.0, 1.0, 1.0)
+
+uniform vec3 ambientColor;
+uniform vec3 directionalLightColor;
+uniform vec3 directionalLightDirection;
+uniform sampler2D map;
+
+uniform vec3 color;
+varying vec3 n;
+varying vec3 v;
+varying vec2 texCoord;
+
+void main(void)
+{
+    vec3 l = directionalLightDirection;
+    vec3 r = reflect(l, n);
+    float diffuse = max(0.0, dot(n, l));
+    float specular = pow(max(0.0, dot(r, v)), SPECULAR_GLOSS);
+    vec4 tex = texture2D(map, texCoord);
+	gl_FragColor.rgb = color * tex.rgb * directionalLightColor * diffuse +
+                       SPECULAR_COLOR * specular +
+                       ambientColor;
+    gl_FragColor.a = tex.a;
 }
 </script>
 <!-- SHADER_SECTION_STOP -->

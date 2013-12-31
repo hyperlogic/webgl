@@ -9,7 +9,14 @@ require(["scripts/three.min.js"], function () {
 
     var geometry = new THREE.CubeGeometry(1, 1, 1);
     //var geometry = new THREE.SphereGeometry(1, 100, 100);
+
+	var floorTexture = new THREE.ImageUtils.loadTexture('images/checkerboard.jpg');
+	//floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
+	//floorTexture.repeat.set( 10, 10 );
+
+
     var uniforms = {
+        map: {type: "t", value: floorTexture},
         color: {type: "c", value: new THREE.Color(0x2020ff)},
         ambientColor: {type: "c", value: new THREE.Color(0x101010)},
         directionalLightColor: {type: "c", value: new THREE.Color(0xffffff)},
@@ -17,8 +24,8 @@ require(["scripts/three.min.js"], function () {
     };
     var material = new THREE.ShaderMaterial({
         uniforms: uniforms,
-        vertexShader: document.getElementById('shaders/lit.vsh').textContent,
-        fragmentShader: document.getElementById('shaders/lit.fsh').textContent,
+        vertexShader: document.getElementById('shaders/tex_lit.vsh').textContent,
+        fragmentShader: document.getElementById('shaders/tex_lit.fsh').textContent,
         maxDirLights: 1
     });
 
