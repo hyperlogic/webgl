@@ -10,7 +10,7 @@ require(["scripts/three.min.js"], function () {
     var geometry = new THREE.CubeGeometry(1, 1, 1);
     //var geometry = new THREE.SphereGeometry(1, 100, 100);
 
-	var checkerTexture = new THREE.ImageUtils.loadTexture('images/checkerboard.jpg');
+	var checkerTexture = new THREE.ImageUtils.loadTexture('images/mobage-check-rare.png');
     var specularTexture = new THREE.ImageUtils.loadTexture('images/holographic-foil2.png');
 
     var uniforms = {
